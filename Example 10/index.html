@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html ng-app="gemStore">
+  <head>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+  </head>
+
+  <body class="list-group" ng-controller="StoreController as store">
+    <header>
+      <h1 class="text-center">Flatlander Crafted Gems</h1>
+      <h2 class="text-center">– an Angular store –</h2>
+    </header>
+
+    <div class="list-group-item" ng-repeat="product in store.products">
+      <!--
+        We are taking out the products information and creating a template for it, in order to include that in our app, we use the ng-include directive
+        Since we are sending it a static field and it is expecting a variable name, we have to single quote our field in order to pass in the string
+        Using ng-include works, but the better solution is creating a custom directive.
+      
+        <h3 ng-include="'product-title.html'">
+        </h3>
+      //-->
+
+      <product-title></product-title>
+
+      <!--
+        Customer directives allow for a more readable format for our html code see below for an example html snippet using custom directives
+        <aside class="col-sm-3">
+          <book-cover></book-cover>
+          <h4><book-rating></book-rating></h4>
+        </aside>
+
+        <div class="col-sm-9">
+          <h3><book-title></book-title></h3>
+          <book-authors></book-authors>
+          <book-review-text></book-review-text>
+          <book-genres></book-genres>
+        </div>
+
+        Custom Directives:
+        Template-expanding Directives are the simplest:
+          define a custom tag or attribute that is expanded or replaced
+          can include Controller logic, if needed
+
+        Directives can also be used for:
+          Expressing complex UI
+          Calling events and registering event handlers
+          Reusing common components
+      //-->
+
+      <!--
+        The ng-include code generates the below html:
+        <h3 ng-include="'product-title.html'" class="ng-scope">
+          <span class="ng-scope ng-binding">Awesome Multi-touch Keyboard</span>
+          <em class="pull-right ng-scope ng-binding">$250.00</em>
+        </h3>
+
+        The custom directive generates the below in our html
+        <h3>
+          {{product.name}}
+          <em class="pull-right">$250.00</em>
+        </h3>
+      //-->
+
+      <!--
+        Different types of directives:
+        Element Directive: <product-title></product-title>
+          No self closing tags because some browsers don't like self closing tags
+        Attribute Directive: <h3 product-title></h3>
+
+        Use Element Directives for UI widgets and Attribute Directives for mixin behaviors, like a tooltip.
+      //-->
+
+      <!-- Defining an attribute directive //-->
+
+      <h3 product-title-att></h3>
+
+      <!-- Generated html
+        <h3>
+          {{product.name}}
+          <em class="pull-right">$250</em>
+        </h3>
+      //-->
+
+      <!-- Image Gallery  -->
+      <div class='gallery' ng-show="product.images.length" ng-controller="GalleryController as gallery">
+      	<!-- Below logic is not referencing our GalleryController, see code below it to see proper implementation of our GalleryController //-->
+
+      	<!--
+        	<img ng-src="{{product.images[0]}}" />
+        //-->
+
+        <img ng-src="{{product.images[gallery.current]}}" />
+
+        <ul class="list-inline thumbs">
+          <li class="thumbnail" ng-repeat="image in product.images">
+            <img ng-src="{{image}}" />
+          </li>
+        </ul>
+      </div>
+
+      <section class="tab" ng-controller="TabController as tab">
+        <ul class="nav nav-pills">
+          <li ng-class="{ active: tab.isSet(1) }">
+            <a href ng-click="tab.setTab(1)">Description</a></li>
+          <li ng-class="{ active: tab.isSet(2) }">
+            <a href ng-click="tab.setTab(2)">Specs</a></li>
+          <li ng-class="{ active: tab.isSet(3) }">
+            <a href ng-click="tab.setTab(3)">Reviews</a></li>
+        </ul>
+
+        <li class="list-group-item" ng-repeat="product in store.products">
+          <div ng-show="tab.isSet(1)">
+            <h4>Description</h4>
+            <blockquote>{{product.description}}</blockquote>
+          </div>
+
+          <div ng-show="tab.isSet(2)">
+            <h4>Specs</h4>
+            <blockquote>Shine: {{product.shine}}</blockquote>
+          </div>
+
+          <!-- Below code shows how to loop over the reviews in our site //-->
+
+          <div class="panel" ng-show="panel.isSelected(3)">
+            <h4>Reviews</h4>
+
+            <blockquote ng-repeat="review in product.reviews">
+              <b>Stars: {{review.stars}}</b>
+              {{review.body}}
+              <cite>by: {{review.authoer}}</cite>
+            </blockquote>
+
+            <!-- Changing our logic from previous example by making review a controller now //-->
+            <!-- ng-submit is a new directive that allows us to call a function when a form is submitted, in this case we are calling the addReview function and passing in the current product that we are iterating through //-->
+            <!-- in this example we are going to add validation to our form. //-->
+            <!-- novalidate turns off the default HTML validation so we can use the Angular validation on our form //-->
+            <!-- below set up will still allow the form to submit if invalid, see the logic below this line to see the actual logic to prevent the form from submitting invalid entries //-->
+            <!--
+              <form name="reviewForm" ng-controller="ReviewController as reviewCtrl" ng-submit="reviewCtrl.addReview(product)" novalidate>
+            //-->
+              <form name="reviewForm" ng-controller="ReviewController as reviewCtrl" ng-submit="reviewForm.$valid && reviewCtrl.addReview(product)" novalidate>
+
+              <!-- This section is the live preview pane for the form //-->
+              <blockquote>
+                <b>Stars: {{reviewCtrl.review.stars}}</b>
+                {{reviewCtrl.review.body}}
+                <cite>by: {{reviewCtrl.review.author}}</cite>
+              </blockquote>
+
+              <!--
+                The ng-model directive is how we bind the below information to the live preview pane above.
+                Below are 2 more examples of 2-way binding with ng-model:
+                CHECKBOX: <input ng-model="review.terms" type="checkbox" /> I agree to the terms
+                RADIO BUTTONS:
+                  <input ng-model="review.color" type="radio" value="red" /> Red
+                  <input ng-model="review.color" type="radio" value="blue" /> Blue
+                  <input ng-model="review.color" type="radio" value="green" /> Green
+              //-->
+
+              <!-- for form validation we need to add the required fields to see which fields are going to be validated //-->
+
+              <select ng-model="reviewCtrl.review.stars" required>
+                <option value="1">1 star</option>
+                <option value="2">2 stars</option>
+                <option value="3">3 stars</option>
+                <option value="4">4 stars</option>
+                <option value="5">5 stars</option>
+              </select>
+
+              <textarea ng-model="reviewCtrl.review.body" required></textarea>
+
+              <label>by:</label>
+
+              <!--
+                To give users some type of indication of what is causing issues with invalid entries, we use the built in angular class of ng-pristine, ng-invalid, ng-dirty, ng-valid; See below for an explanation of each
+                ng-pristine - This field has not been touched by the user in any way
+                ng-invalid - The value contained in this field is an invalid value
+                ng-dirty - The user has entered information in this field
+                ng-valid - The information contained in this field is a valid 
+
+                Below are some examples of fields that have built in Angular Validation
+                Email:  <input type="email" name="email">
+                URL:  <input type="url" name="homepage">
+                Number: <input type="number" name="quantity"> (Can also define min and max numbers) min=1 max=10
+              //-->
+
+              <input type="email" ng-model="reviewCtrl.review.author" required />
+
+              <!-- The below code is only for debugging purposes to show the validity of our form. //-->
+              <!-- The $valid is an angular built in property on our form //-->
+              <div> reviewForm is {{reviewForm.$valid}} </div>
+
+              <input type="submit" value="Submit" />
+            </form>
+          </div>
+        </li>
+      </section>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- ng-app tells our webpage to run the 'store' module when the document loads //-->
+<html ng-app="store">
+	<head>
+		<!-- Twitter Bootstrap //-->
+		<link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+	</head>
+
+	<body>
+		<!-- Angular JS //-->
+		<script type="text/javascript" src="angular.min.js"></script>
+
+		<!-- The javascript file we created for our Angular application //-->
+		<script type="text/javascript" src="app.js"></script>
+
+		<!-- Examples of simple expressions that can be used with Angular //-->
+		<!-- The below expression will evaluate to 10 on the webpage //-->
+		<p>
+			I am {{4 + 6}}
+		</p>
+
+		<!-- The below expression will concatenate into a single string on our webpage //-->
+		<p>
+			{{"hello" + " you"}}
+		</p>
+	</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!-- ng-app tells our webpage to run the 'store' module when the document loads //-->
+<html ng-app="store">
+	<head>
+		<!-- Twitter Bootstrap //-->
+		<link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+	</head>
+
+	<!--
+		In this example we want to have access to the app in the entire body, so add the ng-controller directive to the body tag to make the scope of the controller line up with the entire body of the webpage
+	//-->
+	<body ng-controller="StoreController as store">
+		<!--
+			The below ng-controller directive tells Angular to load in this controller to our webpage
+			ng-controller - directive that tells the app to load in this controller
+			StoreController - the name of the controller being loaded
+			as - keyword used to indicate that we are going to specify an alias for the controller
+			store - StoreController alias
+		//-->
+
+		<!--
+			Below code is for the conditional to not display this div if soldOut is true, there is two ways to do this one is to use the ng-show directive, the more correct way to do it is to use the ng-hide directive, ng-show is commented out below
+		//-->
+
+		<!--
+		<div ng-show="!store.product.soldOut">
+		//-->
+
+		<!--
+			Below div is for a single gem, see code below it for examples for multiple gems
+
+		<div ng-hide="store.product.soldOut">
+			<!--
+				Below logic is the placeholder for the angular controller fields that we are going to be using in our code
+			<h1> Product Name </h1>
+			<h2> $Product Price </h2>
+			<p> Product Description </p>
+			//- ->
+
+			<!--
+				Below code gets information from the controller and puts it into our webpage
+				{{}} - the double curly braces indicate an Angular element that is being brought into the webpage
+			//- ->
+
+			<h1> {{store.product.name}} </h1>
+			<h2> ${{store.product.price}} </h2>
+			<p> {{store.product.description}} </p>
+
+			<!--
+				Below code only shows if canPurchase evaluates to true due to the ng-show directive
+				If the canPurchase attribute does not exist in our Angular app, it is automatically evaluated as a false and the button will not display
+			//- ->
+			<button ng-show="store.product.canPurchase"> Add to Cart </button>
+		</div>
+
+		<!--
+			Below div is showing a possible solution for displaying multiple gems, but this method is not the reccommended method due to the fact that if you update the gem list, you will also need to update this list
+
+		<div ng-hide="store.product.soldOut">
+			<!--
+				Below code gets information from the controller and puts it into our webpage
+				{{}} - the double curly braces indicate an Angular element that is being brought into the webpage
+			//- ->
+
+			<h1> {{store.products[0].name}} </h1>
+			<h2> ${{store.products[0].price}} </h2>
+			<p> {{store.products[0].description}} </p>
+
+			<!--
+				Below code only shows if canPurchase evaluates to true due to the ng-show directive
+				If the canPurchase attribute does not exist in our Angular app, it is automatically evaluated as a false and the button will not display
+			//- ->
+			<button ng-show="store.product.canPurchase"> Add to Cart </button>
+		</div>
+
+		<div ng-hide="store.product.soldOut">
+			<!--
+				Below code gets information from the controller and puts it into our webpage
+				{{}} - the double curly braces indicate an Angular element that is being brought into the webpage
+			//- ->
+
+			<h1> {{store.products[1].name}} </h1>
+			<h2> ${{store.products[1].price}} </h2>
+			<p> {{store.products[1].description}} </p>
+
+			<!--
+				Below code only shows if canPurchase evaluates to true due to the ng-show directive
+				If the canPurchase attribute does not exist in our Angular app, it is automatically evaluated as a false and the button will not display
+			//- ->
+			<button ng-show="store.product.canPurchase"> Add to Cart </button>
+		</div>
+		//-->
+
+		<div ng-repeat="product in store.products">
+			<!--
+				Below code gets information from the controller and puts it into our webpage
+				{{}} - the double curly braces indicate an Angular element that is being brought into the webpage
+			//-->
+
+			<h1> {{product.name}} </h1>
+			<h2> ${{product.price}} </h2>
+			<p> {{product.description}} </p>
+
+			<!--
+				Below code only shows if canPurchase evaluates to true due to the ng-show directive
+				If the canPurchase attribute does not exist in our Angular app, it is automatically evaluated as a false and the button will not display
+			//-->
+			<button ng-show="product.canPurchase"> Add to Cart </button>
+		</div>
+
+		<!-- Angular JS //-->
+		<script type="text/javascript" src="angular.min.js"></script>
+
+		<!-- The javascript file we created for our Angular application //-->
+		<script type="text/javascript" src="app.js"></script>
+	</body>
+</html>

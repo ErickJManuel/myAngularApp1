@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="gemStore">
+  <head>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+  </head>
+  <body class="container" ng-controller="StoreController as store">
+    <div class="product row" ng-repeat="product in store.products">
+      <h3>
+        {{product.name}}
+        <em class="pull-right">{{product.price | currency}}</em>
+      </h3>
+      <!--
+      <!-- Images Gallery //-->
+
+      <!-- Step 1 of the example
+      <div class="gallery">
+        <div class="img-wrap">
+          <img ng-src="{{product.images[0]}}" />
+        </div>
+        <ul class="img-thumbnails clearfix">
+          <!--
+            Below code used for single image
+          <li class="small-image pull-left thumbnail" >
+            <img ng-src="{{product.images[0]}}" />
+          //- ->
+
+          <li class="small-image pull-left thumbnail" ng-repeat="image in product.images">
+            <img ng-src="{{image}}" />
+          </li>
+        </ul>
+      </div>
+    //-->
+
+    <!-- Only show the div if there is something in the image tag //-->
+    <div class="gallery" ng-show="product.images.length">
+      <img class="img img-circle img-thumbnail center-block" ng-src="{{product.images[0]}}" />
+      <ul class="clearfix">
+        <li class="small-image pull-left thumbnail" ng-repeat="image in product.images"> <img ng-src="{{image}}" /></li>
+      </ul>
+    </div>
+    </div>
+  </body>
+</html>

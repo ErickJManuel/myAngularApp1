@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html ng-app="gemStore">
+  <head>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+  </head>
+
+  <body class="list-group" ng-controller="StoreController as store">
+    <header>
+      <h1 class="text-center">Flatlander Crafted Gems</h1>
+      <h2 class="text-center">– an Angular store –</h2>
+    </header>
+
+    <div class="list-group-item" ng-repeat="product in store.products">
+      <h3>
+        {{product.name}}
+        <em class="pull-right">{{product.price | currency}}</em>
+      </h3>
+
+      <!-- Image Gallery  -->
+      <div class='gallery' ng-show="product.images.length" ng-controller="GalleryController as gallery">
+      	<!-- Below logic is not referencing our GalleryController, see code below it to see proper implementation of our GalleryController //-->
+
+      	<!--
+        	<img ng-src="{{product.images[0]}}" />
+        //-->
+
+        <img ng-src="{{product.images[gallery.current]}}" />
+
+        <ul class="list-inline thumbs">
+          <li class="thumbnail" ng-repeat="image in product.images">
+            <img ng-src="{{image}}" />
+          </li>
+        </ul>
+      </div>
+
+      <section class="tab" ng-controller="TabController as tab">
+        <ul class="nav nav-pills">
+          <li ng-class="{ active: tab.isSet(1) }">
+            <a href ng-click="tab.setTab(1)">Description</a></li>
+          <li ng-class="{ active: tab.isSet(2) }">
+            <a href ng-click="tab.setTab(2)">Specs</a></li>
+          <li ng-class="{ active: tab.isSet(3) }">
+            <a href ng-click="tab.setTab(3)">Reviews</a></li>
+        </ul>
+
+        <li class="list-group-item" ng-repeat="product in store.products">
+          <div ng-show="tab.isSet(1)">
+            <h4>Description</h4>
+            <blockquote>{{product.description}}</blockquote>
+          </div>
+
+          <div ng-show="tab.isSet(2)">
+            <h4>Specs</h4>
+            <blockquote>Shine: {{product.shine}}</blockquote>
+          </div>
+
+          <!-- Below code shows how to loop over the reviews in our site //-->
+
+          <div class="panel" ng-show="panel.isSelected(3)">
+            <h4>Reviews</h4>
+
+            <blockquote ng-repeat="review in product.reviews">
+              <b>Stars: {{review.stars}}</b>
+              {{review.body}}
+              <cite>by: {{review.authoer}}</cite>
+            </blockquote>
+
+            <!-- Our very first form! //-->
+            <form name="reviewForm">
+
+              <!-- This section is the live preview pane for the form //-->
+              <blockquote>
+                <b>Stars: {{review.stars}}</b>
+                {{review.body}}
+                <cite>by: {{review.author}}</cite>
+              </blockquote>
+
+              <!--
+                The ng-model directive is how we bind the below information to the live preview pane above.
+                Below are 2 more examples of 2-way binding with ng-model:
+                CHECKBOX: <input ng-model="review.terms" type="checkbox" /> I agree to the terms
+                RADIO BUTTONS:
+                  <input ng-model="review.color" type="radio" value="red" /> Red
+                  <input ng-model="review.color" type="radio" value="blue" /> Blue
+                  <input ng-model="review.color" type="radio" value="green" /> Green
+              //-->
+
+              <select ng-model="review.stars">
+                <option value="1">1 star</option>
+                <option value="2">2 stars</option>
+                <option value="3">3 stars</option>
+                <option value="4">4 stars</option>
+                <option value="5">5 stars</option>
+              </select>
+
+              <textarea ng-model="review.body"></textarea>
+
+              <label>by:</label>
+
+              <input type="email" ng-model="review.author" />
+              <input type="submit" value="Submit" />
+            </form>
+          </div>
+        </li>
+      </section>
+    </div>
+  </body>
+</html>

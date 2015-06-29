@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- ng-app tells our webpage to run the 'store' module when the document loads //-->
+<html ng-app="store">
+	<head>
+		<!-- Twitter Bootstrap //-->
+		<link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+	</head>
+
+	<!--
+		In this example we want to have access to the app in the entire body, so add the ng-controller directive to the body tag to make the scope of the controller line up with the entire body of the webpage
+	//-->
+	<body ng-controller="StoreController as store">
+		<ul class="list group">
+			<!--
+				The ng-repeat directive loops through the arra of products in our app.js and displays it here.
+			//-->
+			<li class="list group item" ng-repeat="product in store.products">
+				<h3>
+					{{product.name}}
+
+					<!--
+						Better way to display prices on the webpage.  If we use the currency filter in our price expression below, Angular will format the price better
+						Filtering in Angular is as easy as piping your expression into the filter you want to use, in this case we are piping the price into the currency 
+						Using filters format {{data* | filter:options*}}
+						example filters:
+						date: {{'1388123412323' | date: 'MM/dd/yyyy @ h:mma'}} -> OUTPUT: 12/27/2013 @ 12:50am
+						uppercase & lowercase: {{'octagon gem' | uppercase}} -> OUTPUT: OCTAGON GEM
+						limitTo: this filter is good to limit the number of characters being displayed or limiting the number of array elements
+							number of characters: {{'My Description' | limitTo:8}} My Descr
+							number of array elements: <li ng-repeat="product in store.products | limitTo:3">
+						orderBy: <li ng-repeat="product in store.products | orderBy:'-price'"> -> OUTPUT: With the -, it will list products by descending price, without it the products will list in ascending order
+					//-->
+					<em class="pull-right">{{product.price | currency}}</em>
+
+					<!-- to display an image in our app.js, we can just use img src="..." because the browser tries to load the image BEFORE the expression gets evaluated so we have to use the ng-src directive //-->
+					<img ng-src="{{product.images[0].full}}" />
+				</h3>
+			</li>
+		</ul>
+
+		<!-- Angular JS //-->
+		<script type="text/javascript" src="angular.min.js"></script>
+
+		<!-- The javascript file we created for our Angular application //-->
+		<script type="text/javascript" src="app.js"></script>
+	</body>
+</html>

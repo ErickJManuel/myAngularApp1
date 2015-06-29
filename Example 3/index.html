@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- ng-app tells our webpage to run the 'store' module when the document loads //-->
+<html ng-app="store">
+	<head>
+		<!-- Twitter Bootstrap //-->
+		<link rel="stylesheet" type="text/css" href="bootstrap.min.css" />
+	</head>
+
+	<body>
+		<!--
+			The below ng-controller directive tells Angular to load in this controller to our webpage
+			ng-controller - directive that tells the app to load in this controller
+			StoreController - the name of the controller being loaded
+			as - keyword used to indicate that we are going to specify an alias for the controller
+			store - StoreController alias
+		//-->
+		<div ng-controller="StoreController as store">
+			<!--
+				Below logic is the placeholder for the angular controller fields that we are going to be using in our code
+			<h1> Product Name </h1>
+			<h2> $Product Price </h2>
+			<p> Product Description </p>
+			//-->
+
+			<!--
+				Below code gets information from the controller and puts it into our webpage
+				{{}} - the double curly braces indicate an Angular element that is being brought into the webpage
+			//-->
+
+			<h1> {{store.product.name}} </h1>
+			<h2> ${{store.product.price}} </h2>
+			<p> {{store.product.description}} </p>
+		</div>
+
+		<!--
+			What happens if we add the below code to our webpage?  Absolutely nothing!  The scope of the controller is tied to the div and since this request is outside of the div, there is no data to pull into this section
+
+			<p>{{store.product.description}}</p>
+		//-->
+
+		<!-- Angular JS //-->
+		<script type="text/javascript" src="angular.min.js"></script>
+
+		<!-- The javascript file we created for our Angular application //-->
+		<script type="text/javascript" src="app.js"></script>
+	</body>
+</html>
